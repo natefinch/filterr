@@ -104,3 +104,15 @@ func TestMakeReturnFuncHandlesMatchFilter(t *testing.T) {
 		t.Error("Matching error was not changed but should have been.")
 	}
 }
+
+func TestMakeReturnFuncHandlesNilError(t *testing.T) {
+	f := MakeReturnFunc(nil, AlwaysMyError)
+
+	var err error
+	// Is(err) will match, so should trigger the match filter, which should
+	// make it into a MyError instead.
+	f(&err, IsMyError)
+	if err != nil {
+		t.Error("Nil error should remain nil.")
+	}
+}
